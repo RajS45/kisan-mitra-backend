@@ -49,26 +49,9 @@ numpy==1.26.4
 pillow==11.1.0
 werkzeug==3.0.4
 
-⚓ Dynamic Port Binding
-The backend uses dynamic configuration environment flags to cleanly switch between production routing and local hosting setups:Pythonimport os
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
-    
-🚀 Local Installation
-Clone the project:
-git clone https://github.com/RajS45/kisan-mitra-backend.git
-cd kisan-mitra-backend
-Setup virtual environment & install packages:
-python -m venv venv
-# On Windows:
-venv\Scripts\activate
-pip install -r requirements.txt
-Run local server:Bashpython app.py
-The local endpoint will listen at http://127.0.0.1:5000/predict.
+## 🔗 Live Links & Demo
 
-🌐 Cloud Deployment (Render Settings)
-Runtime Environment: Python
-Build Command: pip install -r requirements.txt
-Start Command: gunicorn app:app
-Environment Variables: Set PYTHON_VERSION = 3.11.10 to ensure pre-compiled ONNX wheel compatibility.
+| Component | Live Deployment Link | Hosting Platform | Status |
+| :--- | :--- | :--- | :--- |
+| **🌾 Frontend Web UI** | [Visit Kisan Mitra App (Demo)](https://RajS45.github.io/kisan-mitra-backend) | GitHub Pages / Vercel | ● Live |
+| **⚙️ Backend API** | [API Gateway Endpoint](https://kisan-mitra-backend.onrender.com) | Render PaaS | ● Live |
