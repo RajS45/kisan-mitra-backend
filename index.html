@@ -1,0 +1,456 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kisan Mitra AI | Your Digital Plant Doctor</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f0f7f4; color: #2d3748; min-height: 100vh; padding-bottom: 60px; }
+        
+        /* 🎨 Navigation Bar */
+        nav { background: #1b4332; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.1); position: relative; z-index: 10; }
+        .nav-logo { font-size: 1.5rem; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+        .nav-tag { background: #52b788; color: #1b4332; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; }
+
+        /* 🚜 Jumbo Hero Section with Farmer Land Background Image */
+        .hero { 
+            background: linear-gradient(rgba(27, 67, 50, 0.75), rgba(45, 106, 79, 0.8)), 
+                        url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&q=80&w=1200');
+            background-size: cover;
+            background-position: center;
+            color: white; 
+            padding: 50px 20px;
+            text-align: center; 
+            position: relative; 
+            overflow: hidden; 
+            margin-bottom: 40px; 
+            box-shadow: inset 0 -10px 20px rgba(0,0,0,0.15);
+        }
+        .hero-content { max-width: 800px; margin: 0 auto; position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; }
+        
+        /* 👨‍🌾 Authentic Farmer Avatar Container */
+        .farmer-avatar-container {
+            width: 160px;
+            height: 160px;
+            margin-bottom: 15px;
+            animation: gentleFloat 4s ease-in-out infinite;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
+        }
+
+        .hero h1 { font-size: 3.8rem; font-weight: 800; margin-bottom: 15px; letter-spacing: -0.5px; text-shadow: 0 3px 8px rgba(0,0,0,0.5); }
+        .hero p { font-size: 1.4rem; color: #e8f5e9; max-width: 650px; margin: 0 auto; font-weight: 500; line-height: 1.6; text-shadow: 0 2px 4px rgba(0,0,0,0.4); }
+        
+        /* 📱 Main Workspace Dashboard */
+        .dashboard-grid { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: grid; grid-template-columns: 1.2fr 1.3fr; gap: 40px; }
+        @media (max-width: 900px) { .dashboard-grid { grid-template-columns: 1fr; } }
+
+        /* Left Side: Upload Panel */
+        .panel-card { background: #ffffff; padding: 40px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.05); border-top: 8px solid #2d6a4f; position: relative; height: fit-content; }
+        .panel-title { font-size: 1.4rem; color: #1b4332; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        
+        /* 🩺 Advanced Scanning Visuals */
+        .upload-zone { border: 3px dashed #b7e4c7; background: #f8fbf9; padding: 40px; border-radius: 16px; text-align: center; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; min-height: 280px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .upload-zone:hover { border-color: #52b788; background: #f1f8f4; }
+        .upload-zone p { color: #40916c; font-weight: 600; margin-top: 15px; font-size: 1.1rem; }
+        #fileInput { display: none; }
+        #previewImage { width: 100%; max-height: 300px; object-fit: cover; border-radius: 12px; margin-top: 20px; display: none; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        
+        /* Animated Doctor Scanner Shield Overlay */
+        .doctor-loader { display: none; text-align: center; padding: 20px; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(248, 251, 249, 0.98); z-index: 5; flex-direction: column; align-items: center; justify-content: center; }
+        .doctor-icon { font-size: 5rem; animation: pulseScanner 1.5s infinite ease-in-out; }
+        .laser-line { width: 90%; height: 4px; background: linear-gradient(90deg, transparent, #d32f2f, transparent); position: absolute; animation: scanUpDown 2s infinite linear; box-shadow: 0 0 12px #d32f2f; }
+        
+        .btn { background: #2d6a4f; color: white; border: none; width: 100%; padding: 18px; font-size: 1.2rem; font-weight: 700; border-radius: 10px; margin-top: 25px; cursor: pointer; transition: all 0.2s; position: relative; z-index: 6; box-shadow: 0 4px 12px rgba(45,106,79,0.3); }
+        .btn:hover { background: #1b4332; transform: translateY(-2px); }
+        .btn:disabled { background: #95d5b2; cursor: not-allowed; transform: none; box-shadow: none; }
+        
+        /* Right Side: Results Display Panel */
+        .results-column { display: flex; flex-direction: column; gap: 25px; }
+        .welcome-card { background: white; padding: 35px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.05); border-left: 8px solid #52b788; }
+        .welcome-card h3 { color: #1b4332; font-size: 1.4rem; margin-bottom: 12px; }
+        .welcome-card p { color: #555; line-height: 1.6; font-size: 1rem; }
+        
+        /* 📋 Pathology Report Layout */
+        .diagnostic-card { background: #ffffff; padding: 35px; border-radius: 20px; display: none; animation: slideIn 0.4s ease; box-shadow: 0 15px 35px rgba(0,0,0,0.06); border-top: 8px solid #2d6a4f; }
+        .diagnostic-card h3 { color: #1b4332; font-size: 1.6rem; margin-bottom: 20px; border-bottom: 2px solid #b7e4c7; padding-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        
+        .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
+        .metric-box { background: #f4f9f5; padding: 15px; border-radius: 10px; border: 1px solid #e1ebd9; }
+        .metric-label { font-size: 0.9rem; color: #40916c; font-weight: 600; text-transform: uppercase; }
+        .metric-value { font-size: 1.3rem; font-weight: 800; color: #1b4332; margin-top: 5px; }
+        
+        .insights-section { background: #fffdf6; border: 1px solid #faedcd; border-radius: 12px; padding: 20px; margin-top: 15px; }
+        .insights-title { font-weight: 700; color: #d32f2f; margin-bottom: 10px; display: flex; align-items: center; gap: 5px; font-size: 1.1rem; }
+        .insights-text { font-size: 0.95rem; color: #4a5568; line-height: 1.6; }
+        
+        .action-steps { margin-top: 15px; padding-left: 20px; color: #2d3748; font-size: 0.95rem; line-height: 1.6; }
+        .action-steps li { margin-bottom: 8px; }
+
+        /* 🖼️ Gallery Grid Sections */
+        .section-heading { text-align: center; margin: 60px auto 30px auto; max-width: 600px; }
+        .section-heading h2 { color: #1b4332; font-size: 2.2rem; font-weight: 800; }
+        .section-heading p { color: #666; margin-top: 8px; font-size: 1.1rem; }
+
+        .gallery-container { max-width: 1200px; margin: 0 auto; padding: 0 20px 40px 20px; }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 30px; }
+        .crop-card { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.03); border: 1px solid #e2ebd9; transition: all 0.3s ease; }
+        .crop-card:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(0,0,0,0.1); border-color: #52b788; }
+        .crop-img-container { width: 100%; height: 200px; overflow: hidden; position: relative; }
+        .crop-img-container img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .crop-card:hover .crop-img-container img { transform: scale(1.08); }
+        .crop-badge { position: absolute; top: 15px; left: 15px; background: rgba(27,67,50,0.85); color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; backdrop-filter: blur(4px); }
+        .crop-info { padding: 25px; }
+        .crop-info h3 { color: #1b4332; font-size: 1.3rem; margin-bottom: 8px; }
+        .crop-info p { color: #555; font-size: 0.95rem; line-height: 1.5; }
+
+        /* 🎬 Custom Vector Animations */
+        @keyframes gentleFloat {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+            100% { transform: translateY(0px); }
+        }
+        @keyframes pulseScanner { 0% { transform: scale(1); } 50% { transform: scale(1.1); filter: drop-shadow(0 0 20px #52b788); } 100% { transform: scale(1); } }
+        @keyframes scanUpDown { 0% { top: 5%; } 50% { top: 90%; } 100% { top: 5%; } }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<!-- 🧭 Top Navigation -->
+<nav>
+    <div class="nav-logo">🌿 Kisan Mitra AI <span class="nav-tag">v2.0 Live</span></div>
+    <div style="font-size: 0.95rem; font-weight: 500; color: #b7e4c7;">Empowering Indian Agriculture</div>
+</nav>
+
+<!-- 🚜 Hero Section with Scenic Field Background & Requested Authentic Farmer Style -->
+<section class="hero">
+    <div class="hero-content">
+        
+        <!-- 👨‍🌾 Hand-drawn Premium Vector Mirroring the 1000163956.jpg Style -->
+        <div class="farmer-avatar-container">
+            <svg viewBox="0 0 200 200" width="100%" height="100%">
+                <defs>
+                    <linearGradient id="circleBg" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#ffffff"/>
+                        <stop offset="100%" stop-color="#e2ebd9"/>
+                    </linearGradient>
+                    <linearGradient id="skinColor" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#fcd0a1"/>
+                        <stop offset="100%" stop-color="#dfa169"/>
+                    </linearGradient>
+                    <linearGradient id="gamchaOrange" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="#f26419"/>
+                        <stop offset="50%" stop-color="#ff7f32"/>
+                        <stop offset="100%" stop-color="#e14f00"/>
+                    </linearGradient>
+                </defs>
+
+                <!-- Soft Cloud Backdrop Shape Matching Image Style -->
+                <circle cx="100" cy="100" r="94" fill="url(#circleBg)" stroke="#ffffff" stroke-width="4"/>
+                <path d="M 25,120 C 15,90 35,60 60,55 C 80,30 120,30 140,55 C 165,60 185,90 175,120 Z" fill="#d2e4c4" opacity="0.6"/>
+
+                <!-- White Kurta / Shirt Base -->
+                <path d="M50,165 C50,140 70,135 100,135 C130,135 150,140 150,165 Z" fill="#f4f4f6"/>
+                <path d="M85,135 L100,152 L115,135 Z" fill="url(#skinColor)"/>
+                <path d="M85,135 L100,152 L115,135" stroke="#cccccc" stroke-width="1.5" fill="none"/>
+
+                <!-- Red Shoulder Cloth (Gamcha/Dupatta) -->
+                <path d="M52,142 C68,124 100,154 134,136 C144,146 150,158 150,165 L50,165 C50,156 48,146 52,142 Z" fill="#b32626"/>
+                <path d="M54,142 C68,128 98,154 130,138" stroke="#941c1c" stroke-width="3" fill="none"/>
+
+                <!-- Head Profile -->
+                <ellipse cx="100" cy="100" rx="34" ry="38" fill="url(#skinColor)"/>
+                
+                <!-- Ears -->
+                <circle cx="63" cy="100" r="8" fill="#eab380"/>
+                <circle cx="137" cy="100" r="8" fill="#eab380"/>
+
+                <!-- Dark Crop Hair Lines Behind Headband -->
+                <path d="M66,74 C66,50 80,42 100,42 C120,42 134,50 134,74 Z" fill="#242424"/>
+                <path d="M68,68 Q85,50 102,62 Q120,50 132,68" stroke="#111111" stroke-width="3" fill="none"/>
+
+                <!-- Traditional Knotted Orange Headband (Gamcha) -->
+                <path d="M62,68 Q100,56 138,68 L136,84 Q100,74 64,84 Z" fill="url(#gamchaOrange)"/>
+                <!-- Headband Folds and Texture Lines -->
+                <path d="M63,74 Q100,64 137,74" stroke="#c64302" stroke-width="2" fill="none"/>
+                <path d="M64,79 Q100,69 135,79" stroke="#ff9759" stroke-width="1.5" fill="none"/>
+                <!-- Side Knot Tassel -->
+                <path d="M54,72 C42,66 46,84 58,80 Z" fill="#e14f00"/>
+
+                <!-- Expressive Eyes & Thick Eyebrows -->
+                <!-- Left Eyebrow -->
+                <path d="M76,86 Q86,80 94,87" stroke="#242424" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                <!-- Right Eyebrow -->
+                <path d="M106,87 Q114,80 124,86" stroke="#242424" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                <!-- Eyes Outer -->
+                <ellipse cx="86" cy="94" rx="7" ry="5" fill="#ffffff" stroke="#333333" stroke-width="1.5"/>
+                <ellipse cx="114" cy="94" rx="7" ry="5" fill="#ffffff" stroke="#333333" stroke-width="1.5"/>
+                <!-- Pupils -->
+                <circle cx="86" cy="94" r="3.5" fill="#242424"/>
+                <circle cx="114" cy="94" r="3.5" fill="#242424"/>
+                <!-- Eye Highlights -->
+                <circle cx="87.5" cy="92.5" r="1" fill="#ffffff"/>
+                <circle cx="115.5" cy="92.5" r="1" fill="#ffffff"/>
+
+                <!-- Nose Structure -->
+                <path d="M97,92 L97,106 Q100,111 103,106 L103,92" fill="none" stroke="#ca8a50" stroke-width="2" stroke-linecap="round"/>
+
+                <!-- Distinctive Desi Imperial Mustache -->
+                <path d="M70,116 C76,106 94,110 100,115 C106,110 124,106 130,116 C136,122 124,124 116,118 C106,114 102,118 100,121 C98,118 94,114 84,118 C76,124 64,122 70,116 Z" fill="#1a1a1a" stroke="#000000" stroke-width="0.5"/>
+                
+                <!-- Mouth/Smile Line Below Mustache -->
+                <path d="M92,127 Q100,131 108,127" stroke="#6b4423" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+                <!-- Green Leafy Harvest Bundle on the Right -->
+                <g transform="translate(112, 85)">
+                    <!-- Main Stalk base -->
+                    <path d="M12,70 L24,20 Q32,55 24,75 Z" fill="#70ad47"/>
+                    <path d="M16,72 L28,24 Q34,58 28,77 Z" fill="#5b9bd5" opacity="0"/>
+                    
+                    <!-- Dense Leaf Bunches (Layered Leaves) -->
+                    <path d="M22,25 C10,5 30,-15 34,10 C38,-10 54,0 42,20 C54,10 62,25 44,35 C48,45 34,55 26,40 Z" fill="#4ea72a"/>
+                    <path d="M18,30 C5,15 20,0 26,20 C32,2 45,12 36,28 C45,20 52,32 38,40 Z" fill="#6bc235"/>
+                    <path d="M26,22 C14,2 28,-10 32,10" stroke="#377e19" stroke-width="2" fill="none"/>
+                    <path d="M20,28 C10,12 22,2 26,20" stroke="#377e19" stroke-width="1.5" fill="none"/>
+
+                    <!-- String/Ring Tie around Stalk -->
+                    <rect x="14" y="55" width="14" height="5" rx="2.5" fill="#056608" stroke="#ffffff" stroke-width="1"/>
+                </g>
+
+            </svg>
+        </div>
+
+        <h1>Kisan Mitra AI</h1>
+        <p>Your instant cloud-connected plant doctor. Upload a clear photo of crop leaves to diagnose health concerns and access expert damage summaries instantly.</p>
+    </div>
+</section>
+
+<!-- 💻 Workspace Dashboard -->
+<main class="dashboard-grid">
+    <div class="panel-card">
+        <div class="panel-title">📸 Leaf Diagnostic Scanner</div>
+        
+        <div class="upload-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+            <div class="doctor-loader" id="doctorLoader">
+                <div class="laser-line"></div>
+                <div class="doctor-icon">🩺🤖🔬</div>
+                <p style="color: #1b4332; font-weight: 800; margin-top: 20px; font-size: 1.2rem;">
+                    AI Pathologist is scanning cellular matrices...
+                </p>
+                <p style="color: #52b788; font-size: 0.9rem; margin-top: 5px;">Comparing image values with 43,000+ leaf datasets</p>
+            </div>
+
+            <svg id="uploadIcon" width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#40916c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            <p id="uploadText">Tap or drop a leaf image layer into this framework</p>
+            <input type="file" id="fileInput" accept="image/*" onchange="handleFileSelect(event)">
+            <img id="previewImage" alt="Leaf sample frame preview">
+        </div>
+
+        <button class="btn" id="analyzeBtn" onclick="executeInferencePipelines()" disabled>Initiate Artificial Diagnosis</button>
+    </div>
+
+    <div class="results-column">
+        <div class="welcome-card" id="contextBox">
+            <h3>🤖 Deep Learning Diagnostics Guidance</h3>
+            <p>Welcome! Drop a picture of an infected or spotted plant leaf into the workspace area on the left. The neural architecture will instantly read the pixel arrays to generate diagnostic metrics.</p>
+        </div>
+
+        <div class="diagnostic-card" id="resultsBox">
+            <h3>📋 AI Diagnostic Report</h3>
+            
+            <div class="metrics-grid">
+                <div class="metric-box">
+                    <div class="metric-label">Identified Diagnosis</div>
+                    <div class="metric-value" id="diseaseValue" style="color: #d32f2f;">Healthy</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">AI Confidence</div>
+                    <div class="metric-value" id="confidenceValue">0.00%</div>
+                </div>
+            </div>
+
+            <div class="insights-section">
+                <div class="insights-title" id="insightsTitle">🔬 Biological Cause & Summary</div>
+                <p class="insights-text" id="insightsText">No abnormalities detected on the leaf tissue frame structure.</p>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <h4 style="color: #1b4332; font-weight: 700;">🌱 Recommended Action Plan:</h4>
+                <ul class="action-steps" id="actionSteps">
+                    <li>Continue regular crop monitoring.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- 🖼️ Gallery Section -->
+<div class="section-heading">
+    <h2>🌾 Crop Coverage Portfolio</h2>
+    <p>Explore high-resolution reference samples tracking the specific botanical groups integrated into Kisan Mitra's computer vision logic layers.</p>
+</div>
+
+<section class="gallery-container">
+    <div class="gallery-grid">
+        <div class="crop-card">
+            <div class="crop-img-container">
+                <span class="crop-badge">9 Categories</span>
+                <img src="https://cdn.pixabay.com/photo/2011/08/10/22/03/tomato-8671_1280.jpg" alt="Tomato Crops">
+            </div>
+            <div class="crop-info">
+                <h3>Tomato Leaf Pathology</h3>
+                <p>Fully certified to evaluate critical structural conditions like Bacterial Spot, Early/Late Blight, Leaf Mold, Spider Mites, and Target Spot arrays.</p>
+            </div>
+        </div>
+
+        <div class="crop-card">
+            <div class="crop-img-container">
+                <span class="crop-badge">3 Categories</span>
+                <img src="https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&q=80&w=500" alt="Potato Crop Farming">
+            </div>
+            <div class="crop-info">
+                <h3>Potato Leaf Pathology</h3>
+                <p>Instant tracking vector checks for aggressive agricultural fungal variants such as Early Blight spores and systemic Late Blight infestations.</p>
+            </div>
+        </div>
+
+        <div class="crop-card">
+            <div class="crop-img-container">
+                <span class="crop-badge">4 Categories</span>
+                <img src="https://cdn.pixabay.com/photo/2017/07/04/18/46/corn-2472048_1280.jpg" alt="Maize corn fields">
+            </div>
+            <div class="crop-info">
+                <h3>Corn & Maize Diagnostics</h3>
+                <p>Identifies regional crop threats including devastating Common Rust spots, Northern Leaf Blight lines, and localized Cercospora structural damage.</p>
+            </div>
+        </div>
+
+        <div class="crop-card">
+            <div class="crop-img-container">
+                <span class="crop-badge">4 Categories</span>
+                <img src="https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&q=80&w=500" alt="Apples growing on orchard branch">
+            </div>
+            <div class="crop-info">
+                <h3>Apple Leaf Diagnostics</h3>
+                <p>Orchard leaf vector checks managing dangerous contagions like Cedar Apple Rust growths, Black Rot decay signs, and standard Scab spots.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    const pathologyGuide = {
+        "healthy": {
+            cause: "Excellent crop care! The leaf profile shows strong cellular structures, active chlorophyll density, and complete freedom from infectious spots or fungal micro-spores.",
+            actions: ["Maintain standard watering schedules.", "Keep recording weekly scans to monitor changes.", "Apply routine balanced organic manure."]
+        },
+        "early blight": {
+            cause: "Caused by the fungus 'Alternaria solani'. It thrives in warm weather accompanied by frequent rainfall or high humidity, creating dark brown concentric circles that resemble targets.",
+            actions: ["Prune lower leaves to stop soil fungus splash back.", "Apply organic copper-based fungicides immediately.", "Ensure drip irrigation is used instead of overhead watering."]
+        },
+        "late blight": {
+            cause: "An aggressive condition triggered by the oomycete water mold 'Phytophthora infestans'. It spreads exponentially in cool, wet environments and can devastate whole fields within days.",
+            actions: ["Destroy infected leaves completely (do not compost them).", "Apply defensive chlorothalonil or mancozeb protection layers.", "Improve spacing to maximize airflow among foliage."]
+        },
+        "common rust": {
+            cause: "Triggered by the airborne fungus 'Puccinia sorghi'. High humidity combined with moderate temperatures causes powdery orange-brown pustules to break open on leaf surfaces.",
+            actions: ["Plant rust-resistant hybrid seed strains in the next cycle.", "Apply azoxystrobin or preventive fungicides if infection crosses 10%.", "Clear weed hosts around field perimeters."]
+        },
+        "bacterial spot": {
+            cause: "Caused by 'Xanthomonas' bacteria strains. It enters via natural plant breathing pores or wind-damaged tissue wounds during hot, rainy monsoon stretches.",
+            actions: ["Avoid handling wet plants to stop spreading bacteria.", "Spray a customized copper-streptomycin crop mix.", "Rotate crops next year; avoid back-to-back nightshades."]
+        }
+    };
+
+    function handleFileSelect(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.getElementById('previewImage');
+                img.src = e.target.result;
+                img.style.display = 'block';
+                document.getElementById('uploadIcon').style.display = 'none';
+                document.getElementById('uploadText').innerText = "Change Selected Leaf Image";
+                document.getElementById('analyzeBtn').disabled = false;
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+
+    async function executeInferencePipelines() {
+        const fileInput = document.getElementById('fileInput');
+        const btn = document.getElementById('analyzeBtn');
+        const resultsBox = document.getElementById('resultsBox');
+        const contextBox = document.getElementById('contextBox');
+        const loader = document.getElementById('doctorLoader');
+        
+        if (!fileInput.files[0]) return;
+
+        const formData = new FormData();
+        formData.append('file', fileInput.files[0]);
+
+        loader.style.display = 'flex';
+        btn.innerText = "Consulting Cloud AI Core Engine...";
+        btn.disabled = true;
+        resultsBox.style.display = 'none';
+
+        try {
+            const response = await fetch('http://localhost:5000/predict', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (data.disease) {
+                const predictedName = data.disease.toLowerCase();
+                
+                document.getElementById('diseaseValue').innerText = data.disease;
+                document.getElementById('confidenceValue').innerText = data.confidence;
+
+                let lookupKey = "healthy";
+                if (predictedName.includes("blight") && predictedName.includes("early")) lookupKey = "early blight";
+                else if (predictedName.includes("blight") && predictedName.includes("late")) lookupKey = "late blight";
+                else if (predictedName.includes("rust")) lookupKey = "common rust";
+                else if (predictedName.includes("spot") || predictedName.includes("bacterial")) lookupKey = "bacterial spot";
+                else if (predictedName.includes("healthy")) lookupKey = "healthy";
+
+                const details = pathologyGuide[lookupKey] || pathologyGuide["healthy"];
+
+                document.getElementById('insightsText').innerText = details.cause;
+                
+                const actionsUl = document.getElementById('actionSteps');
+                actionsUl.innerHTML = "";
+                details.actions.forEach(action => {
+                    const li = document.createElement('li');
+                    li.innerText = action;
+                    actionsUl.appendChild(li);
+                });
+
+                if (lookupKey === "healthy") {
+                    document.getElementById('diseaseValue').style.color = "#2d6a4f";
+                    document.getElementById('insightsTitle').style.color = "#2d6a4f";
+                } else {
+                    document.getElementById('diseaseValue').style.color = "#d32f2f";
+                    document.getElementById('insightsTitle').style.color = "#d32f2f";
+                }
+
+                contextBox.style.display = 'none';
+                resultsBox.style.display = 'block';
+            }
+        } catch (error) {
+            console.error("Transmission Path Error:", error);
+            alert("Could not pull vectors from Flask backend API stream.");
+        } finally {
+            loader.style.display = 'none';
+            btn.innerText = "Initiate Artificial Diagnosis";
+            btn.disabled = false;
+        }
+    }
+</script>
+
+</body>
+</html>
