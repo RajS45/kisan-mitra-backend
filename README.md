@@ -49,6 +49,6 @@ numpy==1.26.4
 pillow==11.1.0
 werkzeug==3.0.4
 
-## 🔗 Live Links on render.
+## 🔗 Live Links 
 https://kisan-mitra-backend-cayf.onrender.com
 
