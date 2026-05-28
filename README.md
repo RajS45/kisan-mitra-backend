@@ -49,9 +49,6 @@ numpy==1.26.4
 pillow==11.1.0
 werkzeug==3.0.4
 
-## 🔗 Live Links & Demo
+## 🔗 Live Links on render.
+https://kisan-mitra-backend-cayf.onrender.com
 
-| Component | Live Deployment Link | Hosting Platform | Status |
-| :--- | :--- | :--- | :--- |
-| **🌾 Frontend Web UI** | [Visit Kisan Mitra App (Demo)](https://RajS45.github.io/kisan-mitra-backend) | GitHub Pages / Vercel | ● Live |
-| **⚙️ Backend API** | [API Gateway Endpoint]([https://kisan-mitra-backend.onrender.com](https://kisan-mitra-backend-cayf.onrender.com)) | Render PaaS | ● Live |
