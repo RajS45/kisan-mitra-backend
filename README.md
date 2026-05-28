@@ -54,4 +54,4 @@ werkzeug==3.0.4
 | Component | Live Deployment Link | Hosting Platform | Status |
 | :--- | :--- | :--- | :--- |
 | **🌾 Frontend Web UI** | [Visit Kisan Mitra App (Demo)](https://RajS45.github.io/kisan-mitra-backend) | GitHub Pages / Vercel | ● Live |
-| **⚙️ Backend API** | [API Gateway Endpoint](https://kisan-mitra-backend.onrender.com) | Render PaaS | ● Live |
+| **⚙️ Backend API** | [API Gateway Endpoint]([https://kisan-mitra-backend.onrender.com](https://kisan-mitra-backend-cayf.onrender.com)) | Render PaaS | ● Live |
